@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use Memory Patch Harness in research, writing, or a public project, please cite it."
+title: "Memory Patch Harness"
+version: "0.2.0"
+date-released: "2026-06-28"
+abstract: "A local-first, provenance-preserving memory contract for coding agents using Memory Patches, bounded Brain Brief recall, and a curator-limited write boundary."
+authors:
+  - name: "Grunte12"
+repository-code: "https://github.com/Grunte12/memory-patch-harness"
+license: "MIT"
+keywords:
+  - agent memory
+  - context engineering
+  - coding agents
+  - Obsidian
+  - RAG

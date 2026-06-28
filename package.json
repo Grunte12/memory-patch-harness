@@ -1,0 +1,41 @@
+{
+  "name": "memory-patch-harness",
+  "version": "0.2.0",
+  "description": "Provenance-preserving memory contracts for coding agents",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Grunte12/memory-patch-harness.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Grunte12/memory-patch-harness/issues"
+  },
+  "homepage": "https://github.com/Grunte12/memory-patch-harness#readme",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test",
+    "validate:examples": "node scripts/validate.mjs examples/memory-patch.json && node scripts/validate.mjs examples/brain-brief.json && node scripts/validate.mjs examples/derived-index.json && node scripts/validate.mjs examples/hot-context-pack.json",
+    "eval:retrieval": "node scripts/eval-retrieval.mjs",
+    "eval:curator": "node scripts/eval-curator.mjs",
+    "eval:curator:compare": "node scripts/eval-curator.mjs --candidate eval/curator/candidates --allow-failures",
+    "eval:patch-quality": "node scripts/eval-patch-quality.mjs",
+    "eval:agent-run": "node scripts/eval-agent-run.mjs",
+    "eval": "npm run eval:retrieval && npm run eval:curator && npm run eval:patch-quality",
+    "hot-context:render": "node scripts/render-hot-context.mjs",
+    "bench:scale": "node scripts/bench-scale.mjs",
+    "check": "npm run test && npm run validate:examples && npm run eval"
+  },
+  "keywords": [
+    "agent-memory",
+    "opencode",
+    "obsidian",
+    "context-engineering",
+    "llm",
+    "coding-agents",
+    "rag",
+    "memory"
+  ]
+}
