@@ -8,6 +8,7 @@ Run:
 
 ```sh
 npm run eval:retrieval
+npm run eval:report
 ```
 
 The included synthetic fixture contains eight canonical notes and fifteen queries across exact, semantic, conflict, distractor, multi-hop, and hard-semantic categories.
@@ -30,6 +31,8 @@ Interpretation:
 Decision: keep BM25 as an evaluation baseline. Do not make it the production default until a larger real-vault dataset shows a meaningful gain.
 
 This fixture is deliberately small and synthetic. It validates the benchmark code and exposes failure categories; it does not prove production retrieval quality.
+
+`npm run eval:report` runs the deterministic eval suite and writes a generated Markdown summary to `tmp/eval-report.md`.
 
 A separate private real-vault evaluation is summarized in `cost-and-scale.md`. Its note contents and labeled queries are intentionally not committed.
 
@@ -98,6 +101,38 @@ Current fixture result:
 | Vague Summary | 65 | 0-69 |
 
 The intent is not to replace human judgment. It gives the lead agent and curator a cheap guardrail before durable memory is written.
+
+## Learning Loop And Future-Task Eval
+
+Run:
+
+```sh
+npm run eval:learning-loop
+npm run eval:future-task
+```
+
+The learning-loop eval compares a compact v0.2-style Memory Patch candidate with a v0.3 Learning Packet candidate. It scores verification, evidence, future behavior change, loop trace, lifecycle, noise rejection, and structured selectors.
+
+It also reports cost proxies:
+
+- payload bytes,
+- payload characters,
+- estimated tokens,
+- evidence item count,
+- selector item count,
+- score delta per estimated token delta,
+- candidate-specific maximum estimated-token ceilings.
+
+The future-task eval tests downstream usefulness. It asks whether a candidate memory style changes later decisions for visual completion gates, stale policy checks, routine/noise rejection, and contradiction handling.
+
+Current proxy result:
+
+| Candidate | Passed | Score |
+|---|---:|---:|
+| Direct writer baseline | 0/4 | 0 |
+| Learning packet guided | 4/4 | 100 |
+
+This is still a deterministic proxy. It does not prove live-model performance, but it catches whether the harness structure carries behavior-changing memory into later task decisions.
 
 To test a real agent, save its outputs in the same shape as `eval/curator/candidate.memory-patch.json` and run:
 

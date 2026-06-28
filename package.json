@@ -1,6 +1,6 @@
 {
   "name": "memory-patch-harness",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Provenance-preserving memory contracts for coding agents",
   "type": "module",
   "license": "MIT",
@@ -15,15 +15,37 @@
   "engines": {
     "node": ">=20"
   },
+  "files": [
+    "adapters/",
+    "docs/",
+    "eval/",
+    "examples/",
+    "schemas/",
+    "scripts/",
+    "skills/",
+    "src/",
+    "test/",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "PRIVACY.md",
+    "SECURITY.md",
+    "SUPPORT.md",
+    "THIRD_PARTY_NOTICES.md"
+  ],
   "scripts": {
     "test": "node --test",
-    "validate:examples": "node scripts/validate.mjs examples/memory-patch.json && node scripts/validate.mjs examples/brain-brief.json && node scripts/validate.mjs examples/derived-index.json && node scripts/validate.mjs examples/hot-context-pack.json",
+    "validate:examples": "node scripts/validate.mjs examples/memory-patch.json && node scripts/validate.mjs examples/brain-brief.json && node scripts/validate.mjs examples/derived-index.json && node scripts/validate.mjs examples/hot-context-pack.json && node scripts/validate.mjs examples/learning-packet.json",
     "eval:retrieval": "node scripts/eval-retrieval.mjs",
     "eval:curator": "node scripts/eval-curator.mjs",
     "eval:curator:compare": "node scripts/eval-curator.mjs --candidate eval/curator/candidates --allow-failures",
     "eval:patch-quality": "node scripts/eval-patch-quality.mjs",
+    "eval:learning-loop": "node scripts/eval-learning-loop.mjs",
+    "eval:future-task": "node scripts/eval-future-task.mjs",
+    "eval:report": "node scripts/eval-report.mjs",
     "eval:agent-run": "node scripts/eval-agent-run.mjs",
-    "eval": "npm run eval:retrieval && npm run eval:curator && npm run eval:patch-quality",
+    "eval": "npm run eval:retrieval && npm run eval:curator && npm run eval:patch-quality && npm run eval:learning-loop && npm run eval:future-task",
     "hot-context:render": "node scripts/render-hot-context.mjs",
     "bench:scale": "node scripts/bench-scale.mjs",
     "check": "npm run test && npm run validate:examples && npm run eval"

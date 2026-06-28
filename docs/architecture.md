@@ -102,6 +102,19 @@ It exists to make repeated agent sessions cheaper and more consistent. It is not
 5. Curator returns `APPLIED`, `TENSION`, or `BLOCKED`.
 6. A deterministic validator checks contract shape and patch quality.
 
+## Learning Loop
+
+For behavior-changing lessons, use a stricter loop:
+
+1. Recall relevant memory.
+2. Act on the task.
+3. Verify the result with evidence.
+4. Emit a Learning Packet only when future behavior should change.
+5. Curate and link the packet without inventing missing facts.
+6. Run memory health or future-task evals before making broad claims.
+
+The Learning Packet contract records the lesson, trigger, future behavior change, evidence, verification result, loop trace, memory action, confidence, and lifecycle. It exists to block unverified reflection and routine diary entries from becoming durable memory.
+
 ## Recall Flow
 
 1. Lead agent asks a narrow memory question.

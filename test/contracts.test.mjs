@@ -1,12 +1,19 @@
 import test from "node:test"
 import assert from "node:assert/strict"
 import fs from "node:fs"
-import { validateBrainBrief, validateDerivedIndex, validateHotContextPack, validateMemoryPatch } from "../src/contracts.mjs"
+import {
+  validateBrainBrief,
+  validateDerivedIndex,
+  validateHotContextPack,
+  validateLearningPacket,
+  validateMemoryPatch,
+} from "../src/contracts.mjs"
 
 const patch = JSON.parse(fs.readFileSync(new URL("../examples/memory-patch.json", import.meta.url)))
 const brief = JSON.parse(fs.readFileSync(new URL("../examples/brain-brief.json", import.meta.url)))
 const derivedIndex = JSON.parse(fs.readFileSync(new URL("../examples/derived-index.json", import.meta.url)))
 const hotContextPack = JSON.parse(fs.readFileSync(new URL("../examples/hot-context-pack.json", import.meta.url)))
+const learningPacket = JSON.parse(fs.readFileSync(new URL("../examples/learning-packet.json", import.meta.url)))
 
 test("accepts the example Memory Patch", () => {
   assert.deepEqual(validateMemoryPatch(patch), { valid: true, errors: [] })
@@ -61,4 +68,33 @@ test("rejects a hot context pack that claims canonical memory status", () => {
   const result = validateHotContextPack({ ...hotContextPack, canonical_memory: true })
   assert.equal(result.valid, false)
   assert.match(result.errors.join("\n"), /canonical_memory/)
+})
+
+test("accepts the example Learning Packet", () => {
+  assert.deepEqual(validateLearningPacket(learningPacket), { valid: true, errors: [] })
+})
+
+test("rejects a learning packet without verification", () => {
+  const { verification: _verification, ...withoutVerification } = learningPacket
+  const result = validateLearningPacket(withoutVerification)
+  assert.equal(result.valid, false)
+  assert.match(result.errors.join("\n"), /verification/)
+})
+
+test("rejects a learning packet without future behavior change", () => {
+  const result = validateLearningPacket({ ...learningPacket, future_behavior_change: "" })
+  assert.equal(result.valid, false)
+  assert.match(result.errors.join("\n"), /future_behavior_change/)
+})
+
+test("rejects unsupported learning packet selectors", () => {
+  const result = validateLearningPacket({
+    ...learningPacket,
+    selectors: {
+      ...learningPacket.selectors,
+      random_bucket: ["nope"],
+    },
+  })
+  assert.equal(result.valid, false)
+  assert.match(result.errors.join("\n"), /selectors\.random_bucket/)
 })

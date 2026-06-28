@@ -6,6 +6,7 @@ This project should be easy to understand, install, evaluate, and fork. The shap
 
 | Project | Pattern worth copying | Pattern to avoid or keep optional |
 |---|---|---|
+| claude-obsidian | Strong open-source presentation: demo-first README, privacy policy, CODEOWNERS, command map, seeded vault, skills split, audits, and methodology modes. | Do not copy its assets, prose, vault content, or full plugin scope. This repo should stay a small harness with contracts and evals. |
 | Graphify | Clear one-command usage, multi-agent platform matrix, project-scoped installs, generated artifacts that are easy to inspect. | Do not make knowledge-graph generation a core dependency. Keep it as a future optional derived-index adapter. |
 | Headroom | Strong value proposition, proof-oriented compression claims, multiple integration surfaces: library, proxy, wrapper, MCP. | Do not add token-compression middleware until this harness measures a repeated context-size problem. |
 | Anthropic Skills | Self-contained skill folders with `SKILL.md`, metadata, examples, and progressive disclosure. | Do not put broad project knowledge inside global skills. Skills should explain workflow and load references only on demand. |
@@ -128,6 +129,7 @@ Before presenting this as a public harness:
 
 - Graphify: https://github.com/safishamsi/graphify
 - Headroom: https://github.com/chopratejas/headroom
+- claude-obsidian: https://github.com/AgriciDaniel/claude-obsidian
 - Anthropic Skills: https://github.com/anthropics/skills
 - 12-factor Agents: https://github.com/humanlayer/12-factor-agents
 - Addy Osmani Loop Engineering: https://addyosmani.com/blog/loop-engineering/

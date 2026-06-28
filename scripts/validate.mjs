@@ -7,6 +7,7 @@ import {
   validateBrainBrief,
   validateDerivedIndex,
   validateHotContextPack,
+  validateLearningPacket,
   validateMemoryPatch,
 } from "../src/contracts.mjs"
 
@@ -29,6 +30,8 @@ const kind = detectContract(value)
 const result =
   kind === "memory-patch"
     ? validateMemoryPatch(value)
+    : kind === "learning-packet"
+      ? validateLearningPacket(value)
     : kind === "brain-brief"
       ? validateBrainBrief(value)
       : kind === "derived-index"

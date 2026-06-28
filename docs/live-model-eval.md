@@ -63,6 +63,8 @@ node scripts/eval-agent-run.mjs \
 
 Use `--allow-failures` when collecting comparison data without failing CI.
 
+Use `eval/live-agent/run-template.md` as a copyable worksheet for recording model, prompt, token budget, failures, and human correction time.
+
 ## Recommended Report
 
 For each model/prompt setup, record:

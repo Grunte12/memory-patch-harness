@@ -66,6 +66,7 @@ Validate a patch:
 node scripts/validate.mjs examples/memory-patch.json
 node scripts/validate.mjs examples/derived-index.json
 node scripts/validate.mjs examples/hot-context-pack.json
+node scripts/validate.mjs examples/learning-packet.json
 node scripts/render-hot-context.mjs --pack examples/hot-context-pack.json --out tmp/hot-context.md
 ```
 
@@ -76,10 +77,13 @@ npm run eval
 node scripts/eval-retrieval.mjs --dataset eval/fixtures --k 3 --json tmp/report.json
 node scripts/eval-curator.mjs --candidate eval/curator/candidate.memory-patch.json
 npm run eval:curator:compare
+npm run eval:learning-loop
+npm run eval:future-task
+npm run eval:report
 node scripts/eval-agent-run.mjs --curator-output eval/curator/candidates/C-memory-patch.json --patches eval/patch-quality/candidates
 ```
 
-The retrieval benchmark compares dependency-free lexical and BM25 baselines using Hit@k, Recall@k, MRR, nDCG, and retrieved context size. The curator benchmark checks Brain Brief and Memory Patch behavior: bounded recall, provenance retention, conflict surfacing, noise rejection, and derived-artifact boundaries. The comparison script scores proxy baselines for direct writing, curator inference, and Memory Patch handoff. These are evaluation surfaces, not production retrievers.
+The retrieval benchmark compares dependency-free lexical and BM25 baselines using Hit@k, Recall@k, MRR, nDCG, and retrieved context size. The curator benchmark checks Brain Brief and Memory Patch behavior: bounded recall, provenance retention, conflict surfacing, noise rejection, and derived-artifact boundaries. The comparison script scores proxy baselines for direct writing, curator inference, and Memory Patch handoff. The learning-loop eval adds token/cost proxies and a future-task utility check. `npm run eval:report` writes a generated summary to `tmp/eval-report.md`. These are evaluation surfaces, not production retrievers.
 
 ## Guides
 
@@ -88,12 +92,15 @@ The retrieval benchmark compares dependency-free lexical and BM25 baselines usin
 - [Live Model Evaluation](docs/live-model-eval.md): compare real model outputs against the deterministic evaluator.
 - [Live Model Results](docs/live-model-results.md): publish real model results separately from proxy fixtures.
 - [Evaluation](docs/evaluation.md): understand the retrieval, curator, patch-quality, and baseline comparison checks.
+- [Learning Loop](docs/learning-loop.md): v0.3 contract for verified behavior-changing lessons.
+- [คู่มือแนวคิดภาษาไทย](docs/thai-strategy-guide.md): อธิบาย strategy, process, use cases, trade-offs, และข้อจำกัดของ Memory Patch Harness สำหรับผู้ใช้ไทย.
 - [Repository Patterns](docs/repository-patterns.md): how this repo borrows packaging patterns from agent-tool projects without adding heavy dependencies.
 
 ## Project Health
 
 - License: [MIT](LICENSE)
 - Changelog: [CHANGELOG.md](CHANGELOG.md)
+- Privacy policy: [PRIVACY.md](PRIVACY.md)
 - Security policy: [SECURITY.md](SECURITY.md)
 - Support policy: [SUPPORT.md](SUPPORT.md)
 - Contributing guide: [CONTRIBUTING.md](CONTRIBUTING.md)

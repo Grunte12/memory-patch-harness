@@ -3,6 +3,7 @@ node_modules/
 Thumbs.db
 coverage/
 tmp/
+.opencode/
 *.log
 .env
 .env.*

@@ -41,6 +41,20 @@ const HOT_CONTEXT_CATEGORIES = new Set([
   "open-question",
 ])
 
+const LEARNING_ACTIONS = new Set([
+  "apply",
+  "update",
+  "deprecate",
+  "tension",
+  "reject",
+])
+
+const VERIFICATION_STATUSES = new Set([
+  "verified",
+  "partially-verified",
+  "blocked",
+])
+
 function text(value, path, errors, min = 1) {
   if (typeof value !== "string" || value.trim().length < min) {
     errors.push(`${path} must be a string with at least ${min} characters`)
@@ -223,6 +237,74 @@ export function validateHotContextPack(value) {
   return { valid: errors.length === 0, errors }
 }
 
+export function validateLearningPacket(value) {
+  const errors = []
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return { valid: false, errors: ["learning packet must be an object"] }
+  }
+
+  if (value.role !== "learning-packet") errors.push("role must be learning-packet")
+  text(value.lesson, "lesson", errors, 16)
+  text(value.trigger, "trigger", errors, 12)
+  text(value.future_behavior_change, "future_behavior_change", errors, 16)
+  if ("selectors" in value) validateLearningSelectors(value.selectors, "selectors", errors)
+
+  if (!value.scope || typeof value.scope !== "object" || Array.isArray(value.scope)) {
+    errors.push("scope must be an object")
+  } else {
+    stringArray(value.scope.applies, "scope.applies", errors, { min: 1 })
+    stringArray(value.scope.excludes, "scope.excludes", errors)
+  }
+
+  validateEvidenceArray(value.evidence, "evidence", errors)
+
+  if (!value.verification || typeof value.verification !== "object" || Array.isArray(value.verification)) {
+    errors.push("verification must be an object")
+  } else {
+    if (!VERIFICATION_STATUSES.has(value.verification.status)) {
+      errors.push("verification.status must be verified, partially-verified, or blocked")
+    }
+    text(value.verification.result, "verification.result", errors, 8)
+    if ("evidence" in value.verification) {
+      validateEvidenceArray(value.verification.evidence, "verification.evidence", errors)
+    }
+  }
+
+  if (!value.loop_trace || typeof value.loop_trace !== "object" || Array.isArray(value.loop_trace)) {
+    errors.push("loop_trace must be an object")
+  } else {
+    text(value.loop_trace.recall, "loop_trace.recall", errors, 8)
+    text(value.loop_trace.action, "loop_trace.action", errors, 8)
+    text(value.loop_trace.verification, "loop_trace.verification", errors, 8)
+    text(value.loop_trace.learning, "loop_trace.learning", errors, 8)
+  }
+
+  if (!LEARNING_ACTIONS.has(value.memory_action)) {
+    errors.push("memory_action must be apply, update, deprecate, tension, or reject")
+  }
+  if (!["high", "medium", "low"].includes(value.confidence)) {
+    errors.push("confidence must be high, medium, or low")
+  }
+  validateLifecycle(value.lifecycle, "lifecycle", errors, { required: true })
+
+  return { valid: errors.length === 0, errors }
+}
+
+function validateLearningSelectors(value, path, errors) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    errors.push(`${path} must be an object when present`)
+    return
+  }
+  const allowed = new Set(["tags", "file_globs", "tool_names", "error_regex"])
+  for (const key of Object.keys(value)) {
+    if (!allowed.has(key)) errors.push(`${path}.${key} is unsupported`)
+  }
+  if ("tags" in value) stringArray(value.tags, `${path}.tags`, errors)
+  if ("file_globs" in value) stringArray(value.file_globs, `${path}.file_globs`, errors)
+  if ("tool_names" in value) stringArray(value.tool_names, `${path}.tool_names`, errors)
+  if ("error_regex" in value) stringArray(value.error_regex, `${path}.error_regex`, errors)
+}
+
 function validateLifecycle(value, path, errors, { required = false } = {}) {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     if (required) errors.push(`${path} must be an object`)
@@ -260,6 +342,7 @@ function validateEvidenceArray(value, path, errors) {
 }
 
 export function detectContract(value) {
+  if (value && typeof value === "object" && value.role === "learning-packet") return "learning-packet"
   if (value && typeof value === "object" && "claim" in value) return "memory-patch"
   if (value && typeof value === "object" && "relevant_memory" in value) return "brain-brief"
   if (value && typeof value === "object" && value.role === "derived-index") return "derived-index"
